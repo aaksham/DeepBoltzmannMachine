@@ -1,0 +1,10 @@
+function [J,h_x,sampled_x]=sampler_unif(x,W,b,c)
+prob_h_given_x=sigmoid(b+W*x);
+h_x=prob_h_given_x;
+s_p_h=unifrnd(0,1,size(b));
+sampled_h=double(prob_h_given_x>s_p_h);
+prob_x_given_h=sigmoid(c+W'*sampled_h);
+s_p_x=unifrnd(0,1,size(c));
+sampled_x=double(prob_x_given_h>s_p_x);
+cross_entropy=x'*log(prob_x_given_h)+(1-x')*log(1-prob_x_given_h);
+J=-1*cross_entropy;

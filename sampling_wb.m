@@ -1,0 +1,33 @@
+clear
+load('theta_wb_epochs_500_lr_0.020_esl_5_hl_400.mat','thetas');
+c=thetas(1:784,1);
+c=c';
+W1=thetas(1:784,2:end);
+a=thetas(785,2:end);
+b=thetas(786,2:end);
+W2=thetas(787:end,2:end);
+size(W1)
+size(W2)
+size(a)
+size(b)
+size(c)
+H2=size(W2,2);
+X=zeros(size(W1'));
+for t=1:100
+    random_image=binornd(1,0.5,784,1);
+    h2=binornd(1,0.5,1,H2);
+    v_prev=random_image';
+    for k=1:1000
+        p_h1=sigmoid(v_prev*W1+h2*W2'+b);
+        h1=binornd(1,p_h1);
+        p_h2=sigmoid(h1*W2+a);
+        h2=binornd(1,p_h2);
+        p_v=sigmoid(h1*W1'+c);
+        v_prev=binornd(1,p_v);
+    end
+    X(t,:)=v_prev';
+end
+fname=strcat('theta_wb_epochs_500_lr_0.020_esl_5_hl_400','.png');
+displayData(X,fname); 
+fname=strcat('W1','theta_wb_epochs_500_lr_0.020_esl_5_hl_400','.png');
+displayData(W1',fname);
